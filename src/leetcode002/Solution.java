@@ -18,9 +18,7 @@ package leetcode002;
  */
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
@@ -29,44 +27,27 @@ import java.util.Map;
  */
 class Solution {
     public static listNode addTwoNumbers(listNode l1, listNode l2) {
-        List<Integer> list1 = new ArrayList<>();
-        List<Integer> list2 = new ArrayList<>();
-        // 读取到第一个和第二个listNode的值
-        while (l1.next != null) {
-            list1.add(l1.val);
-            l1 = l1.next;
+        listNode listNode = new listNode(0);
+        int sum = 0;
+        listNode curr = listNode;
+        listNode p1 = l1, p2 = l2;
+        while (p1 != null || p2 !=null) {
+            if (p1 != null) {
+                sum += p1.val;
+                p1 = p1.next;
+            }
+            if (p2 != null) {
+                sum += p2.val;
+                p2 = p2.next;
+            }
+            curr.next = new listNode(sum % 10);
+            sum /= 10;
+            curr = curr.next;
         }
-        list1.add(l1.val);
-        while (l2.next != null) {
-            list2.add(l2.val);
-            l2 = l2.next;
+        if (sum == 1) {
+            curr.next = new listNode(sum);
         }
-        list2.add(l2.val);
-        String val1 = "";
-        String val2 = "";
-        for (int i = list1.size() - 1; i >= 0; i--) {
-            val1 += list1.get(i);
-        }
-        for (int j = list2.size() - 1; j >= 0; j--) {
-            val2 += list2.get(j);
-        }
-        int val11 = Integer.parseInt(val1);
-        int val12 = Integer.parseInt(val2);
-        int sumNum = val11 + val12;
-        String sumString = String.valueOf(sumNum); //807
-        Map<Integer, listNode> map = new HashMap<>();
-        for (int i = sumString.length() - 1; i >= 0 ; i--) {
-            char c = sumString.charAt(i);
-            int numericValue = Character.getNumericValue(c);
-            listNode listNode = new listNode(numericValue);
-            int val = listNode.val;
-            map.put(i, listNode);
-        }
-        for (int i = sumString.length() - 1; i > 0 ; i--) {
-            map.get(i).next = map.get(i - 1);
-        }
-        map.get(0).next = null;
-       return map.get(sumString.length() - 1);
+        return listNode.next;
     }
 
     public static void main(String[] args) {
